@@ -61,20 +61,16 @@ def get_students(course_id):
         select s.id, s.name, c.id, c.name from student_course sc
         join Student s on s.id = sc.student_id
         join Course c on c.id = sc.course_id
-        ''')
-    course_list = cur.fetchall()
-    for course in course_list:
-        if course_id == course[2]:
-            print(course)
+        where c.id = %s
+        ''', (course_id,))
+    for sc in cur.fetchall():
+        print(sc)
     pass
 
 def get_student(student_id):
-    cur.execute('''
-    select * from Student;
-    ''')
+    cur.execute('select * from Student where id = %s', (student_id,))
     for s in map(lambda x: (x[0], x[1], float(x[2]) if x[2] else None, x[3].strftime('%d.%m.%Y')), cur.fetchall()):
-        if  s[0] == student_id:
-            print(s)
+        print(s)
     pass
 
 def add_course(name):
@@ -89,5 +85,5 @@ if __name__ == '__main__':
     get_student(12)
     get_student(13)
     add_students(3, add_student_from_list())
-    get_students(3)
+    get_students(1)
 
